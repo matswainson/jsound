@@ -5,7 +5,9 @@
 		var base = this;
 
 		base.$el = $(el);
-		base.defaultOptions = {};
+		base.defaultOptions = {
+			mini: false
+		};
 
 		if (!base.$el.context) {
 			base.$el = $('[data-cloud]');
@@ -14,7 +16,7 @@
 
 		base.options = $.extend({}, base.defaultOptions, options);
 
-		var template = '<div class="jsound__current">' +
+		var template = '<div class="jsound__current' + ((base.options.mini) ? ' jsound--mini' : '') + '">' +
 					   '<span class="jsound__artist">{{artist}}</span>' +
 					   '<span class="jsound__title">{{title}}</span>' +
 					   '<div class="jsound__buttons">' +
@@ -22,7 +24,7 @@
 					   '</div>' +
 					   '<div class="jsound__background" style="background-image:bg"></div>' +
 					   '<div class="jsound__shade"></div>' +
-					   '<div class="jsound__wave" style="background-image:wv"></div>' +
+					   '<div class="jsound__wave"><div style="background-image:wv"></div></div>' +
 					   '</div>' +
 					   '<iframe class="iframe" width="100%" height="100" scrolling="no" frameborder="no" src="' +
 					   'https://w.soundcloud.com/player/?url=http://api.soundcloud.com/{{url}}"></iframe>';
