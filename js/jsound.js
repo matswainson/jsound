@@ -10,7 +10,7 @@
 		};
 
 		if (!base.$el.context) {
-			base.$el = $('[data-cloud]');
+			base.$el = $('iframe');
 			options = el;
 		}
 
@@ -25,35 +25,27 @@
 					   '<div class="jsound__background" style="background-image:bg"></div>' +
 					   '<div class="jsound__shade"></div>' +
 					   '<div class="jsound__wave"><div style="background-image:wv"></div></div>' +
-					   '</div>' +
-					   '<iframe class="iframe" width="100%" height="100" scrolling="no" frameborder="no" src="' +
-					   'https://w.soundcloud.com/player/?url=http://api.soundcloud.com/{{url}}"></iframe>';
+					   '</div>';
 
-		function initPlayer(jsound, audio){
-			var soundcloud;
+		function initSound(iframe){
+			var audio = { id: iframe.getAttribute('src').match(/[0-9]/g).join('') },
+				baseClass = 'jSound jSound_' + audio.id,
+				jSound,
+				soundcloud;
 
 			function replaceHTML(){
-				var element = jsound.parentNode,
-					html = document.createElement('div');
-				html.setAttribute('class', 'jSound jSound_' + audio.id + ' jsound--hidden');
-				html.innerHTML = template.replace('{{url}}', audio.url);
-				element.replaceChild(html, jsound);
-				jsound = document.getElementsByClassName('jSound_' + audio.id)[0];
-				soundcloud = SC.Widget(html.getElementsByClassName('iframe')[0]);
+				jSound = document.createElement('div');
+				jSound.setAttribute('class', baseClass + ' jsound--hidden');
+				jSound.innerHTML = template;
+				iframe.parentNode.insertBefore(jSound, iframe);
+				var current = jSound.getElementsByClassName('jsound__current')[0];
+				current.parentNode.insertBefore(iframe, current);
 			}
 
 			function bindListeners(){
 				var percent = 0,
-					playButton = jsound.getElementsByClassName('jsound__play')[0];
-				playButton.addEventListener('click', function(){
-					soundcloud.isPaused(function(paused){
-						if (paused) {
-							soundcloud.play();
-						} else {
-							soundcloud.pause();
-						}
-					});
-				});
+					playButton = jSound.getElementsByClassName('jsound__play')[0];
+
 				soundcloud.bind(SC.Widget.Events.FINISH, function(){
 					playButton.setAttribute('class', 'jsound__play');
 					percent = 0;
@@ -64,7 +56,16 @@
 				soundcloud.bind(SC.Widget.Events.PLAY, function(){
 					playButton.setAttribute('class', 'jsound__play jsound--pause');
 				});
-				var wave = jsound.getElementsByClassName('jsound__wave')[0];
+				playButton.addEventListener('click', function(){
+					soundcloud.isPaused(function(paused){
+						if (paused) {
+							soundcloud.play();
+						} else {
+							soundcloud.pause();
+						}
+					});
+				});
+				var wave = jSound.getElementsByClassName('jsound__wave')[0];
 				soundcloud.bind(SC.Widget.Events.PLAY_PROGRESS, function(){
 					soundcloud.getPosition(function(position){
 						position = Number(((position / audio.duration) * 100).toFixed(1));
@@ -76,39 +77,47 @@
 				});
 			}
 
-			function showPlayer(){
-				jsound.setAttribute('class', 'jSound jSound_' + audio.id);
+			function setTrack(sound) {
+				audio.duration = sound.duration;
+				audio.waveform_url = sound.waveform_url;
+				var current = jSound.getElementsByClassName('jsound__current')[0];
+				var innerHTML = current.innerHTML
+					.replace('{{artist}}', sound.user.username)
+					.replace('bg', 'url(' + (sound.artwork_url || sound.user.avatar_url) + ')')
+					.replace('wv', 'url(' + sound.waveform_url + ')')
+					.replace('{{title}}', sound.title);
+				current.innerHTML = innerHTML;
 			}
 
-			replaceHTML();
-			soundcloud.bind(SC.Widget.Events.READY,function(){
-				soundcloud.getCurrentSound(function(sound){
-					audio.duration = sound.duration;
-					audio.waveform_url = sound.waveform_url;
-					var current = jsound.getElementsByClassName('jsound__current')[0];
-					var innerHTML = current.innerHTML
-						.replace('{{artist}}', sound.user.username)
-						.replace('bg', 'url(' + (sound.artwork_url || sound.user.avatar_url) + ')')
-						.replace('wv', 'url(' + sound.waveform_url + ')')
-						.replace('{{title}}', sound.title);
-					current.innerHTML = innerHTML;
-					bindListeners();
-					showPlayer();
+			function soundcloudReady() {
+				soundcloud.bind('ready',function(){
+					soundcloud.getCurrentSound(function(sound){
+						bindListeners();
+						setTrack(sound);
+						showPlayer();
+					});
 				});
-			});
+			}
+
+			function bindJCloud() {
+				soundcloud = SC.Widget(iframe);
+				replaceHTML();
+				soundcloudReady();
+			}
+
+			function showPlayer(){
+				jSound.setAttribute('class', baseClass);
+			}
+
+			bindJCloud();
 
 		}
 
 		base.init = function(){
 			if (base.$el.length) {
 				$.each(base.$el, function() {
-					if (this.tagName !== 'DIV') return;
-					var jsound = this,
-						audio = {
-							id: this.getAttribute('data-cloud').replace(/\D/g, '') + Math.floor((Math.random() * 10) + 1),
-							url: this.getAttribute('data-cloud')
-						};
-					initPlayer(jsound, audio);
+					if (this.tagName !== 'IFRAME' || this.getAttribute('src').indexOf('soundcloud') === -1) return;
+					initSound(this);
 				});
 			}
 		};
