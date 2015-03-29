@@ -247,7 +247,7 @@
 }
 
 .jsound__playlist::-webkit-scrollbar-track {
-      background-color: #555;
+      background-color: #ccc;
 }
 
 .jsound__playlist::-webkit-scrollbar-thumb {
@@ -255,22 +255,34 @@
 }
 
 .jsound__playlist::-webkit-scrollbar-button {
-      background-color: #7c2929;
+      background-color: #292929;
 }
 
 .jsound__playlist::-webkit-scrollbar-corner {
       background-color: black;
 }
 
+.jsound--dark::-webkit-scrollbar-track {
+      background-color: #555;
+}
+
 .jsound__playlist__item {
-	background: #222;
+	background: #ddd;
 	cursor: pointer;
 	height: 50px;
-	padding: 0 10px 0 60px;
+	padding: 0 10px 0 50px;
 	position: relative;
 }
 
 .jsound__playlist__item:nth-child(even) {
+	background: #eee;
+}
+
+.jsound--dark .jsound__playlist__item {
+	background: #222;
+}
+
+.jsound--dark .jsound__playlist__item:nth-child(even) {
 	background: #2A2A2A;
 }
 
@@ -281,7 +293,7 @@
 }
 
 .jsound__playlist__title {
-	color: #ccc;
+	color: #222;
 	font-size: 14px;
 	line-height: 50px;
 	overflow: hidden;
@@ -289,13 +301,17 @@
 	white-space: nowrap;
 }
 
+.jsound--dark .jsound__playlist__title {
+	color: #ccc;
+}
+
 .jsound__playlist__thumb {
 	background-size: cover;
-	height: 50px;
-	left: 0;
+	height: 30px;
+	left: 10px;
 	position: absolute;
-	top: 0;
-	width: 50px;
+	top: 10px;
+	width: 30px;
 }
 
 .jsound--mini .jsound__title,
@@ -331,7 +347,11 @@
 
 	.jsound--mini .jsound__title {
 		font-size: 16px;
-		padding: 2px 146px 10px 10px;
+		padding: 2px 64px 10px 10px;
+	}
+
+	.jsound--playlist .jsound--mini .jsound__title {
+		padding-right: 148px;
 	}
 
 	.jsound--mini .jsound__artist {

@@ -8,7 +8,8 @@
 
 		base.$el = $(el);
 		base.defaultOptions = {
-			mini: false
+			mini: false,
+			theme: 'light'
 		};
 
 		if (!base.$el.context) {
@@ -149,7 +150,7 @@
 					innerHTML = '';
 				baseClass = baseClass + ' jsound--playlist';
 				jSound.setAttribute('class', baseClass);
-				playlist.setAttribute('class', 'jsound__playlist');
+				playlist.setAttribute('class', (base.options.theme === 'dark') ? 'jsound__playlist jsound--dark' : 'jsound__playlist');
 				for (var i = 0; i < audio.sounds.length; i++) {
 					var track = audio.sounds[i];
 					innerHTML += templatePlaylist.replace('{{index}}', i)
