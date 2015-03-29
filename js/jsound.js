@@ -20,8 +20,8 @@
 		base.options = $.extend({}, base.defaultOptions, options);
 
 		var template = '<div class="jsound__current' + ((base.options.mini) ? ' jsound--mini' : '') + '">' +
-					   '<span class="jsound__artist">{{artist}}</span>' +
-					   '<span class="jsound__title">{{title}}</span>' +
+					   '<div class="jsound__artist"><a href="#" target="_blank">{{artist}}</a></div>' +
+					   '<div class="jsound__title"><a href="#" target="_blank">{{title}}</a></div>' +
 					   '<div class="jsound__buttons">' +
 					   '<button class="jsound__prev" type="button"></button>' +
 					   '<button class="jsound__play" type="button"></button>' +
@@ -122,8 +122,10 @@
 				audio.duration = sound.duration;
 				audio.waveform_url = sound.waveform_url;
 				var current = jSound.getElementsByClassName('jsound__current')[0];
-				current.children[0].innerHTML = sound.user.username;
-				current.children[1].innerHTML = sound.title;
+				current.children[0].children[0].setAttribute('href', sound.user.permalink_url);
+				current.children[0].children[0].innerHTML = sound.user.username;
+				current.children[1].children[0].setAttribute('href', sound.permalink_url);
+				current.children[1].children[0].innerHTML = sound.title;
 				current.children[3].setAttribute('style', 'background-image:url(' + (sound.artwork_url || sound.user.avatar_url) + ')');
 				current.children[5].children[0].setAttribute('style', 'background-image:url(' + sound.waveform_url + ')');
 				if (callback) {
