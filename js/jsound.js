@@ -81,12 +81,10 @@
 				audio.duration = sound.duration;
 				audio.waveform_url = sound.waveform_url;
 				var current = jSound.getElementsByClassName('jsound__current')[0];
-				var innerHTML = current.innerHTML
-					.replace('{{artist}}', sound.user.username)
-					.replace('bg', 'url(' + (sound.artwork_url || sound.user.avatar_url) + ')')
-					.replace('wv', 'url(' + sound.waveform_url + ')')
-					.replace('{{title}}', sound.title);
-				current.innerHTML = innerHTML;
+				current.children[0].innerHTML = sound.user.username;
+				current.children[1].innerHTML = sound.title;
+				current.children[3].setAttribute('style', 'background-image:url(' + (sound.artwork_url || sound.user.avatar_url) + ')');
+				current.children[5].children[0].setAttribute('style', 'background-image:url(' + sound.waveform_url + ')');
 			}
 
 			function soundcloudReady() {
