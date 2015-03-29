@@ -115,7 +115,9 @@
 	padding: 0 0 20px 0;
 }
 
-.jsound__play {
+.jsound__play,
+.jsound__prev,
+.jsound__next {
 	background: transparent;
 	border: 2px solid white;
 	cursor: pointer;
@@ -127,14 +129,16 @@
 	height: 48px;
 	position: relative;
 	width: 48px;
-	-webkit-transition: transform .3s ease;
-	-moz-transition: transform .3s ease;
-	-ms-transition: transform .3s ease;
-	-o-transition: transform .3s ease;
-	transition: transform .3s ease;
+	-webkit-transition: opacity .3s ease;
+	-moz-transition: opacity .3s ease;
+	-ms-transition: opacity .3s ease;
+	-o-transition: opacity .3s ease;
+	transition: opacity .3s ease;
 }
 
-.jsound__play:focus {
+.jsound__play:focus,
+.jsound__prev:focus,
+.jsound__next:focus {
 	outline: none;
 }
 
@@ -164,12 +168,134 @@
 	left: 25px;
 }
 
-.jsound--mini .jsound__wave {
-	bottom: 0;
+.jsound__prev,
+.jsound__next {
+	display: none;
+	left: 50%;
+	opacity: .5;
+	position: absolute;
+	top: 0;
 }
 
-.jsound--mini .jsound__volume {
-	display: none;
+.jsound--playlist .jsound__prev,
+.jsound--playlist .jsound__next {
+	display: block;
+}
+
+.jsound__prev:hover,
+.jsound__next:hover {
+	opacity: .8;
+}
+
+.jsound__prev {
+	margin-left: -82px;
+}
+
+.jsound__next {
+	margin-left: 34px;
+}
+
+.jsound__prev:before,
+.jsound__prev:after,
+.jsound__next:before,
+.jsound__next:after {
+	background: transparent;
+	border: 7px solid transparent;
+	border-width: 7px 9px;
+	border-left-color: #fff;
+	content: "";
+	margin-top: -6px;
+	position: absolute;
+	top: 50%;
+}
+
+.jsound__prev:before,
+.jsound__prev:after {
+	border-left-color: transparent;
+	border-right-color: #fff;
+}
+
+.jsound__prev:before {
+	left: 2px;
+}
+
+.jsound__prev:after {
+	left: 11px;
+}
+
+.jsound__next:before {
+	left: 14px;
+}
+
+.jsound__next:after {
+	left: 23px;
+}
+
+.jsound__playlist {
+	display: block;
+	list-style-type: none;
+	margin: 0;
+	max-height: 150px;
+	overflow: auto;
+	padding: 0;
+	position: relative;
+	z-index: 2;
+}
+
+.jsound__playlist::-webkit-scrollbar {
+      width: 15px;
+}
+
+.jsound__playlist::-webkit-scrollbar-track {
+      background-color: #555;
+}
+
+.jsound__playlist::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+}
+
+.jsound__playlist::-webkit-scrollbar-button {
+      background-color: #7c2929;
+}
+
+.jsound__playlist::-webkit-scrollbar-corner {
+      background-color: black;
+}
+
+.jsound__playlist__item {
+	background: #222;
+	cursor: pointer;
+	height: 50px;
+	padding: 0 10px 0 60px;
+	position: relative;
+}
+
+.jsound__playlist__item:nth-child(even) {
+	background: #2A2A2A;
+}
+
+.jsound__playlist__artist,
+.jsound__playlist__title,
+.jsound__playlist__thumb {
+	display: block;
+}
+
+.jsound__playlist__title {
+	color: #ccc;
+	font-size: 14px;
+	line-height: 50px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.jsound__playlist__thumb {
+	background-size: cover;
+	height: 50px;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 50px;
 }
 
 .jsound--mini .jsound__title,
@@ -185,12 +311,27 @@
 	top: 50%;
 }
 
+.jsound--playlist .jsound--mini .jsound__buttons button {
+	display: inline-block;
+}
+
+.jsound--mini .jsound__prev,
+.jsound--mini .jsound__next {
+	left: auto;
+	margin: 0 12px 0 0;
+	position: relative;
+	top: auto;
+}
+
+.jsound--mini .jsound__next {
+	margin: 0 0 0 12px;
+}
 
 @media (max-width: 540px) {
 
 	.jsound--mini .jsound__title {
 		font-size: 16px;
-		padding: 2px 10px 10px 10px;
+		padding: 2px 146px 10px 10px;
 	}
 
 	.jsound--mini .jsound__artist {
@@ -203,7 +344,9 @@
 		right: 16px;
 	}
 
-	.jsound--mini .jsound__play {
+	.jsound--mini .jsound__play,
+	.jsound--mini .jsound__prev,
+	.jsound--mini .jsound__next {
 		height: 32px;
 		width: 32px;
 	}
@@ -213,6 +356,22 @@
 		border-width: 7px 0 7px 10px;
 		left: 10px;
 		top: 7px;
+	}
+
+	.jsound--mini .jsound__prev:before {
+		left: -5px;
+	}
+
+	.jsound--mini .jsound__prev:after {
+		left: 3px;
+	}
+
+	.jsound--mini .jsound__next:before {
+		left: 7px;
+	}
+
+	.jsound--mini .jsound__next:after {
+		left: 15px;
 	}
 
 	.jsound--mini .jsound--pause:before,
