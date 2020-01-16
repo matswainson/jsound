@@ -127,7 +127,7 @@ var SC=SC||{};SC.Widget=function(n){function t(r){if(e[r])return e[r].exports;va
 				current.children[0].children[0].innerHTML = sound.user.username;
 				current.children[1].children[0].setAttribute('href', sound.permalink_url);
 				current.children[1].children[0].innerHTML = sound.title;
-				current.children[3].setAttribute('style', 'background-image:url(' + (sound.artwork_url || sound.user.avatar_url) + ')');
+				current.children[3].setAttribute('style', 'background-image:url(' + (sound.artwork_url || sound.user && sound.user.avatar_url || '') + ')');
 				current.children[5].children[0].setAttribute('style', 'background-image:url(' + sound.waveform_url + ')');
 				if (callback) {
 					callback();
@@ -158,7 +158,7 @@ var SC=SC||{};SC.Widget=function(n){function t(r){if(e[r])return e[r].exports;va
 					var track = audio.sounds[i];
 					innerHTML += templatePlaylist.replace('{{index}}', i)
 								 .replace('{{title}}', track.title)
-								 .replace('bg', track.artwork_url || track.user.avatar_url);
+								 .replace('bg', track.artwork_url || track.user && track.user.avatar_url || '');
 				}
 				playlist.innerHTML = innerHTML;
 				jSound.appendChild(playlist);
